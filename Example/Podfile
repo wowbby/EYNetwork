@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'EYNetwork_Example' do
+  pod 'EYNetwork', :path => '../'
+
+  target 'EYNetwork_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
