@@ -10,7 +10,6 @@
 @interface AFHTTPSessionManager (RACSupport)
 - (nonnull RACSignal *)GET:(NSString *)URLString
                 parameters:(nullable id)parameters;
-
 - (nonnull RACSignal *)HEAD:(NSString *)URLString
                  parameters:(nullable id)parameters;
 - (nonnull RACSignal *)POST:(NSString *)URLString

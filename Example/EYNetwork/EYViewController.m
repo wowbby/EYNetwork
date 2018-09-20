@@ -10,6 +10,7 @@
 #import "AFNetworkReachabilityManager+RACSupport.h"
 #import "AFHTTPSessionManager+RACSupport.h"
 #import "RACSignal+RACSupport.h"
+
 @interface EYViewController ()
 @property (nonatomic, assign) BOOL start;
 @end
@@ -42,12 +43,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
-
-    RACSignal *signal = [manager GET:@"http://api01.bitspaceman.com:8000/news/qihoo"
-                          parameters:@{ @"kw" : @"腾讯",
-                                        @"apikey" : @"6Vw54sUQ1woFrPFsUeRtjPk6CSWIJRBnQKJV6DJ1BjD5Xo4zDyLpE38w7R8nkjUs" }];
+    RACSignal *signal = [[AFHTTPSessionManager manager] GET:@"http://api01.bitspaceman.com:8000/news/qihoo?apikey=6Vw54sUQ1woFrPFsUeRtjPk6CSWIJRBnQKJV6DJ1BjD5Xo4zDyLpE38w7R8nkjUs"
+                                                 parameters:@{}];
 
     [signal subscribeNext:^(id _Nullable x) {
       NSLog(@"请求成功：%@", x);

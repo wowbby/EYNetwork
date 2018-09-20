@@ -36,7 +36,7 @@ TODO: Add long description of the pod here.
   #   'EYNetwork' => ['EYNetwork/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'Pod/Classes/EYNetwork.h'
   # s.frameworks = 'UIKit', 'MapKit'
    s.dependency 'AFNetworking'
    s.dependency 'ReactiveObjC'

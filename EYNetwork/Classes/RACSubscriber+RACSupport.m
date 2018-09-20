@@ -32,9 +32,25 @@ static NSString *const kprogress = @"progress";
 }
 - (void)sendProgress:(NSProgress *)progress
 {
-    [[self performSelector:@selector(dispose)] dispose];
     if (self.progress) {
         self.progress(progress);
+    }
+}
+@end
+
+@interface RACPassthroughSubscriber ()
+// The subscriber to which events should be forwarded.
+@property (nonatomic, strong, readonly) id<RACSubscriber> innerSubscriber;
+@end
+
+@implementation RACPassthroughSubscriber (RACSupport)
+- (void)sendProgress:(NSProgress *)progress
+{
+    if ([self.innerSubscriber isKindOfClass:[RACSubscriber class]]) {
+
+        RACSubscriber *subscriber = (RACSubscriber *)self.innerSubscriber;
+
+        [subscriber sendProgress:progress];
     }
 }
 @end

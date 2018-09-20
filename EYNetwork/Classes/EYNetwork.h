@@ -8,5 +8,7 @@
 #ifndef EYNetwork_h
 #define EYNetwork_h
 
+#import "AFHTTPSessionManager+RACSupport.h"
+#import "AFNetworkReachabilityManager+RACSupport.h"
 
 #endif /* EYNetwork_h */
