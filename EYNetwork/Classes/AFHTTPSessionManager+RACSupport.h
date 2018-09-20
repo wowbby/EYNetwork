@@ -31,6 +31,5 @@
 - (nonnull RACSignal *)downloadTaskWithRequest:(NSURLRequest *)request
                                    destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination;
 - (nonnull RACSignal *)downloadTaskWithResumeData:(NSData *)resumeData
-                                         progress:(nullable void (^)(NSProgress *downloadProgress))downloadProgressBlock
                                       destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination;
 @end

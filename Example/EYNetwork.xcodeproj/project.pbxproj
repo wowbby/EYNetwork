@@ -303,7 +303,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-EYNetwork_Example/Pods-EYNetwork_Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-EYNetwork_Example/Pods-EYNetwork_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/EYNetwork/EYNetwork.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveObjC/ReactiveObjC.framework",
@@ -316,7 +316,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EYNetwork_Example/Pods-EYNetwork_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EYNetwork_Example/Pods-EYNetwork_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AADC4A3D4B2A035967248C21 /* [CP] Check Pods Manifest.lock */ = {

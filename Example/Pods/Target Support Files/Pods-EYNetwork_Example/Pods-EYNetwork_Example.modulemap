@@ -1,0 +1,6 @@
+framework module Pods_EYNetwork_Example {
+  umbrella header "Pods-EYNetwork_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}
