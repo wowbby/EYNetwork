@@ -7,17 +7,60 @@
 //
 
 #import "EYViewController.h"
-
+#import "AFNetworkReachabilityManager+RACSupport.h"
+#import "AFHTTPSessionManager+RACSupport.h"
+#import "RACSignal+RACSupport.h"
 @interface EYViewController ()
-
+@property (nonatomic, assign) BOOL start;
 @end
 
 @implementation EYViewController
+- (IBAction)btnAction:(id)sender
+{
+
+    if (!_start) {
+
+        [self rac_startMonitoring];
+    }
+    else {
+        [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
+    }
+    _start = !_start;
+}
+- (void)rac_startMonitoring
+{
+
+    [[[AFNetworkReachabilityManager sharedManager] rac_startMonitoring] subscribeNext:^(id _Nullable x) {
+
+      NSLog(@"%@", x);
+    }];
+    ;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
+
+    RACSignal *signal = [manager GET:@"http://api01.bitspaceman.com:8000/news/qihoo"
+                          parameters:@{ @"kw" : @"腾讯",
+                                        @"apikey" : @"6Vw54sUQ1woFrPFsUeRtjPk6CSWIJRBnQKJV6DJ1BjD5Xo4zDyLpE38w7R8nkjUs" }];
+
+    [signal subscribeNext:^(id _Nullable x) {
+      NSLog(@"请求成功：%@", x);
+    }
+        progress:^(NSProgress *progress) {
+          NSLog(@"请求过程");
+        }
+        error:^(NSError *_Nullable error) {
+          NSLog(@"请求失败：%@", error);
+        }
+        completed:^{
+          NSLog(@"请求完成");
+        }];
 }
 
 - (void)didReceiveMemoryWarning

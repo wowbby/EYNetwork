@@ -2,132 +2,284 @@
 //  AFHTTPSessionManager+RACSupport.m
 //  AFNetworking
 //
-//  Created by 郑振兴 on 2018/9/19.
+//  Created by 郑振兴 on 2018/9/20.
 //
 
 #import "AFHTTPSessionManager+RACSupport.h"
-#import "RACSubscriber+AFProgressCallbacks.h"
-static NSString *const kRACAFNResponseObjectErrorKey = @"responseObject";
-
+#import "RACSubscriber+RACSupport.h"
+#import <ReactiveObjC/RACSubscriber+Private.h>
 @implementation AFHTTPSessionManager (RACSupport)
-- (RACSignal *)rac_GET:(NSString *)path parameters:(id)parameters
+- (RACSignal *)GET:(NSString *)URLString parameters:(id)parameters
 {
-    return [[self rac_requestPath:path parameters:parameters method:@"GET"]
-        setNameWithFormat:@"%@ -rac_GET: %@, parameters: %@", self.class, path, parameters];
-}
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
 
-- (RACSignal *)rac_HEAD:(NSString *)path parameters:(id)parameters
-{
-    return [[self rac_requestPath:path parameters:parameters method:@"HEAD"]
-        setNameWithFormat:@"%@ -rac_HEAD: %@, parameters: %@", self.class, path, parameters];
-}
-
-- (RACSignal *)rac_POST:(NSString *)path parameters:(id)parameters
-{
-    return [[self rac_requestPath:path parameters:parameters method:@"POST"]
-        setNameWithFormat:@"%@ -rac_POST: %@, parameters: %@", self.class, path, parameters];
-}
-- (RACSignal *)rac_PUT:(NSString *)path parameters:(id)parameters
-{
-    return [[self rac_requestPath:path parameters:parameters method:@"PUT"]
-        setNameWithFormat:@"%@ -rac_PUT: %@, parameters: %@", self.class, path, parameters];
-}
-
-- (RACSignal *)rac_PATCH:(NSString *)path parameters:(id)parameters
-{
-    return [[self rac_requestPath:path parameters:parameters method:@"PATCH"]
-        setNameWithFormat:@"%@ -rac_PATCH: %@, parameters: %@", self.class, path, parameters];
-}
-
-- (RACSignal *)rac_DELETE:(NSString *)path parameters:(id)parameters
-{
-    return [[self rac_requestPath:path parameters:parameters method:@"DELETE"]
-        setNameWithFormat:@"%@ -rac_DELETE: %@, parameters: %@", self.class, path, parameters];
-}
-- (RACSignal *)rac_POST:(NSString *)path parameters:(id)parameters constructingBodyWithBlock:(void (^)(id<AFMultipartFormData> formData))block
-{
-    return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
-
-
-      NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:path relativeToURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:nil];
-
-      NSURLSessionDataTask *task = [self dataTaskWithRequest:request
-          uploadProgress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendUploadProgress:uploadProgress];
-          }
-          downloadProgress:^(NSProgress *_Nonnull downloadProgress) {
-            [(RACSubscriber *)subscriber sendDownloadProgress:downloadProgress];
-          }
-          completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
-            if (error) {
-                NSMutableDictionary *userInfo = [error.userInfo mutableCopy];
-                if (responseObject) {
-                    userInfo[kRACAFNResponseObjectErrorKey] = responseObject;
-                }
-                NSError *errorWithRes = [NSError errorWithDomain:error.domain code:error.code userInfo:[userInfo copy]];
-                [subscriber sendError:errorWithRes];
-            }
-            else {
-                [subscriber sendNext:RACTuplePack(responseObject, response)];
-                [subscriber sendCompleted];
-            }
-          }];
-      [task resume];
-
-      return [RACDisposable disposableWithBlock:^{
-        [task cancel];
-      }];
-    }] setNameWithFormat:@"%@ -rac_POST: %@, parameters: %@, constructingBodyWithBlock:", self.class, path, parameters];
-    ;
-}
-
-- (RACSignal *)rac_requestPath:(NSString *)path parameters:(id)parameters method:(NSString *)method
-{
-
-    return [[RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
-      NSString *URL = [[NSURL URLWithString:path relativeToURL:self.baseURL] absoluteString];
-
-      [self POST:URL
+      NSURLSessionDataTask *task = [self GET:URLString
           parameters:parameters
-          progress:^(NSProgress *_Nonnull uploadProgress) {
-
+          progress:^(NSProgress *_Nonnull downloadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:downloadProgress];
           }
           success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
-
+            [subscriber sendNext:RACTuplePack(task, responseObject)];
+            [subscriber sendCompleted];
           }
-          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error){
-
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
           }];
-
-
-      NSURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:URL parameters:parameters error:nil];
-      NSURLSessionDataTask *task = [self dataTaskWithRequest:request
-          uploadProgress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendUploadProgress:uploadProgress];
-          }
-          downloadProgress:^(NSProgress *_Nonnull downloadProgress) {
-            [(RACSubscriber *)subscriber sendDownloadProgress:downloadProgress];
-          }
-          completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
-            if (error) {
-                NSMutableDictionary *userInfo = [error.userInfo copy];
-                if (responseObject) {
-                    userInfo[kRACAFNResponseObjectErrorKey] = responseObject;
-                }
-                NSError *responseError = [NSError errorWithDomain:error.domain code:error.code userInfo:[error.userInfo copy]];
-                [subscriber sendError:responseError];
-                [subscriber sendCompleted];
-            }
-            else {
-
-                [subscriber sendNext:RACTuplePack(responseObject, response)];
-            }
-          }];
-      [task resume];
-
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
-    }] setNameWithFormat:@"%@ -rac_requestPath: %@, parameters: %@, method:%@", self.class, path, parameters, method];
+    }];
+}
+- (RACSignal *)HEAD:(NSString *)URLString
+         parameters:(nullable id)parameters
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionDataTask *task = [self HEAD:URLString
+          parameters:parameters
+          success:^(NSURLSessionDataTask *_Nonnull task) {
+            [subscriber sendNext:task];
+            [subscriber sendCompleted];
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (RACSignal *)POST:(NSString *)URLString
+         parameters:(nullable id)parameters
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionDataTask *task = [self POST:URLString
+          parameters:parameters
+          progress:^(NSProgress *_Nonnull uploadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+          }
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+            [subscriber sendNext:RACTuplePack(task, responseObject)];
+            [subscriber sendCompleted];
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (RACSignal *)POST:(NSString *)URLString
+                   parameters:(nullable id)parameters
+    constructingBodyWithBlock:(nullable void (^)(id<AFMultipartFormData> formData))block
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+      NSURLSessionDataTask *task = [self POST:URLString
+          parameters:parameters
+          constructingBodyWithBlock:block
+          progress:^(NSProgress *_Nonnull uploadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+          }
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+            [subscriber sendNext:RACTuplePack(task, responseObject)];
+            [subscriber sendCompleted];
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (nonnull RACSignal *)PUT:(NSString *)URLString
+                parameters:(nullable id)parameters
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+      NSURLSessionDataTask *task = [self PUT:URLString
+          parameters:parameters
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+            [subscriber sendNext:RACTuplePack(task, responseObject)];
+            [subscriber sendCompleted];
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (RACSignal *)PATCH:(NSString *)URLString parameters:(id)parameters
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+      NSURLSessionDataTask *task = [self PATCH:URLString
+          parameters:parameters
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+            [subscriber sendNext:RACTuplePack(task, responseObject)];
+            [subscriber sendCompleted];
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (RACSignal *)DELETE:(NSString *)URLString parameters:(id)parameters
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+      NSURLSessionDataTask *task = [self DELETE:URLString
+          parameters:parameters
+          success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
+            [subscriber sendNext:RACTuplePack(task, responseObject)];
+            [subscriber sendCompleted];
+          }
+          failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
+            [subscriber sendError:error];
+            [subscriber sendCompleted];
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (nonnull RACSignal *)uploadTaskWithRequest:(NSURLRequest *)request
+                                    fromFile:(NSURL *)fileURL
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionUploadTask *task = [self uploadTaskWithRequest:request
+          fromFile:fileURL
+          progress:^(NSProgress *_Nonnull uploadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+          }
+          completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
+            if (error) {
+                [subscriber sendError:error];
+                [subscriber sendCompleted];
+            }
+            else {
+                [subscriber sendNext:RACTuplePack(response, responseObject)];
+                [subscriber sendCompleted];
+            }
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (nonnull RACSignal *)uploadTaskWithRequest:(NSURLRequest *)request
+                                    fromData:(nullable NSData *)bodyData
+{
+
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionUploadTask *task = [self uploadTaskWithRequest:request
+          fromData:bodyData
+          progress:^(NSProgress *_Nonnull uploadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+          }
+          completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
+            if (error) {
+                [subscriber sendError:error];
+                [subscriber sendCompleted];
+            }
+            else {
+                [subscriber sendNext:RACTuplePack(response, responseObject)];
+                [subscriber sendCompleted];
+            }
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (nonnull RACSignal *)uploadTaskWithStreamedRequest:(NSURLRequest *)request
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionUploadTask *task = [self uploadTaskWithStreamedRequest:request
+          progress:^(NSProgress *_Nonnull uploadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+          }
+          completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
+            if (error) {
+                [subscriber sendError:error];
+                [subscriber sendCompleted];
+            }
+            else {
+                [subscriber sendNext:RACTuplePack(response, responseObject)];
+                [subscriber sendCompleted];
+            }
+
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (nonnull RACSignal *)downloadTaskWithRequest:(NSURLRequest *)request
+                                   destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
+{
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionDownloadTask *task = [self downloadTaskWithRequest:request
+          progress:^(NSProgress *_Nonnull downloadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:downloadProgress];
+          }
+          destination:destination
+          completionHandler:^(NSURLResponse *_Nonnull response, NSURL *_Nullable filePath, NSError *_Nullable error) {
+            if (error) {
+                [subscriber sendError:error];
+                [subscriber sendCompleted];
+            }
+            else {
+                [subscriber sendNext:RACTuplePack(response, filePath)];
+                [subscriber sendCompleted];
+            }
+
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
+}
+- (nonnull RACSignal *)downloadTaskWithResumeData:(NSData *)resumeData
+                                         progress:(nullable void (^)(NSProgress *downloadProgress))downloadProgressBlock
+                                      destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
+{
+
+    return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
+
+      NSURLSessionDownloadTask *task = [self downloadTaskWithResumeData:resumeData
+          progress:^(NSProgress *_Nonnull downloadProgress) {
+            [(RACSubscriber *)subscriber sendProgress:downloadProgress];
+          }
+          destination:destination
+          completionHandler:^(NSURLResponse *_Nonnull response, NSURL *_Nullable filePath, NSError *_Nullable error) {
+            if (error) {
+                [subscriber sendError:error];
+                [subscriber sendCompleted];
+            }
+            else {
+                [subscriber sendNext:RACTuplePack(response, filePath)];
+                [subscriber sendCompleted];
+            }
+
+          }];
+      return [RACDisposable disposableWithBlock:^{
+        [task cancel];
+      }];
+    }];
 }
 @end
