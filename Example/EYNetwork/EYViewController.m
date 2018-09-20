@@ -10,7 +10,6 @@
 #import "AFNetworkReachabilityManager+RACSupport.h"
 #import "AFHTTPSessionManager+RACSupport.h"
 #import "RACSignal+RACSupport.h"
-#import "EYNetwork.h"
 
 @interface EYViewController ()
 @property (nonatomic, assign) BOOL start;
@@ -43,8 +42,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-
-    RACSignal *signal = [[AFHTTPSessionManager manager] GET:@"http://api01.bitspaceman.com:8000/news/qihoo?apikey=6Vw54sUQ1woFrPFsUeRtjPk6CSWIJRBnQKJV6DJ1BjD5Xo4zDyLpE38w7R8nkjUs"
+    //http://api01.bitspaceman.com:8000/news/qihoo?apikey=6Vw54sUQ1woFrPFsUeRtjPk6CSWIJRBnQKJV6DJ1BjD5Xo4zDyLpE38w7R8nkjUs
+    RACSignal *signal = [[AFHTTPSessionManager manager] GET:@"https://dldir1.qq.com/qqfile/QQforMac/QQ_V6.5.1.dmg"
                                                  parameters:@{}];
 
     [signal subscribeNext:^(id _Nullable x) {

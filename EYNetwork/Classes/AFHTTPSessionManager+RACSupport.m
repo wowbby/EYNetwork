@@ -6,8 +6,8 @@
 //
 
 #import "AFHTTPSessionManager+RACSupport.h"
-#import "RACSubscriber+RACSupport.h"
-#import <ReactiveObjC/RACSubscriber+Private.h>
+#import "RACPassthroughSubscriber+RACSupport.h"
+#import <EYRACSubscriber.h>
 @implementation AFHTTPSessionManager (RACSupport)
 - (RACSignal *)GET:(NSString *)URLString parameters:(id)parameters
 {
@@ -16,7 +16,7 @@
       NSURLSessionDataTask *task = [self GET:URLString
           parameters:parameters
           progress:^(NSProgress *_Nonnull downloadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:downloadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:downloadProgress];
           }
           success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
             [subscriber sendNext:RACTuplePack(task, responseObject)];
@@ -59,7 +59,7 @@
       NSURLSessionDataTask *task = [self POST:URLString
           parameters:parameters
           progress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:uploadProgress];
           }
           success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
             [subscriber sendNext:RACTuplePack(task, responseObject)];
@@ -83,7 +83,7 @@
           parameters:parameters
           constructingBodyWithBlock:block
           progress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:uploadProgress];
           }
           success:^(NSURLSessionDataTask *_Nonnull task, id _Nullable responseObject) {
             [subscriber sendNext:RACTuplePack(task, responseObject)];
@@ -161,7 +161,7 @@
       NSURLSessionUploadTask *task = [self uploadTaskWithRequest:request
           fromFile:fileURL
           progress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:uploadProgress];
           }
           completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
             if (error) {
@@ -187,7 +187,7 @@
       NSURLSessionUploadTask *task = [self uploadTaskWithRequest:request
           fromData:bodyData
           progress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:uploadProgress];
           }
           completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
             if (error) {
@@ -210,7 +210,7 @@
 
       NSURLSessionUploadTask *task = [self uploadTaskWithStreamedRequest:request
           progress:^(NSProgress *_Nonnull uploadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:uploadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:uploadProgress];
           }
           completionHandler:^(NSURLResponse *_Nonnull response, id _Nullable responseObject, NSError *_Nullable error) {
             if (error) {
@@ -235,7 +235,7 @@
 
       NSURLSessionDownloadTask *task = [self downloadTaskWithRequest:request
           progress:^(NSProgress *_Nonnull downloadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:downloadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:downloadProgress];
           }
           destination:destination
           completionHandler:^(NSURLResponse *_Nonnull response, NSURL *_Nullable filePath, NSError *_Nullable error) {
@@ -263,7 +263,7 @@
 
       NSURLSessionDownloadTask *task = [self downloadTaskWithResumeData:resumeData
           progress:^(NSProgress *_Nonnull downloadProgress) {
-            [(RACSubscriber *)subscriber sendProgress:downloadProgress];
+            [(EYRACSubscriber *)subscriber sendProgress:downloadProgress];
           }
           destination:destination
           completionHandler:^(NSURLResponse *_Nonnull response, NSURL *_Nullable filePath, NSError *_Nullable error) {
