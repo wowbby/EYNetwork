@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EYNetwork'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'A short description of EYNetwork.'
 
 # This description is used to generate tags and improve search results.
@@ -36,7 +36,7 @@ TODO: Add long description of the pod here.
   #   'EYNetwork' => ['EYNetwork/Assets/*.png']
   # }
 
-  s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'EYNetwork/Classes/EYNetwork.h'
   # s.frameworks = 'UIKit', 'MapKit'
    s.dependency 'AFNetworking'
    s.dependency 'ReactiveObjC'
