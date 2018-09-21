@@ -8,5 +8,5 @@
 #import <ReactiveObjC/ReactiveObjC.h>
 #import <ReactiveObjC/RACSignal.h>
 @interface RACSignal (RACSupport)
-- (RACDisposable *)subscribeNext:(void (^)(id _Nullable x))nextBlock progress:(void (^)(NSProgress *))progress error:(void (^)(NSError *_Nullable error))errorBlock completed:(void (^)(void))completedBlock;
+- (RACDisposable *)subscribeStart:(void (^)(NSURLSessionTask *task))start Next:(void (^)(id _Nullable x))nextBlock progress:(void (^)(NSProgress *))progress error:(void (^)(NSError *_Nullable error))errorBlock completed:(void (^)(void))completedBlock;
 @end

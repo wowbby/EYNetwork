@@ -26,6 +26,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -46,6 +47,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -69,6 +71,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -93,6 +96,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -112,6 +116,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -130,6 +135,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -148,6 +154,7 @@
             [subscriber sendError:error];
             [subscriber sendCompleted];
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -173,6 +180,7 @@
                 [subscriber sendCompleted];
             }
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -199,6 +207,7 @@
                 [subscriber sendCompleted];
             }
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -223,6 +232,7 @@
             }
 
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -249,6 +259,7 @@
             }
 
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];
@@ -276,6 +287,7 @@
             }
 
           }];
+      [(EYRACSubscriber *)subscriber sendStart:task];
       return [RACDisposable disposableWithBlock:^{
         [task cancel];
       }];

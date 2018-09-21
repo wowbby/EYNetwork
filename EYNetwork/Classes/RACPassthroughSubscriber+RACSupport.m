@@ -23,4 +23,14 @@
         [subscriber sendProgress:progress];
     }
 }
+- (void)sendStart:(NSURLSessionTask *)task
+{
+
+    if ([self.innerSubscriber isKindOfClass:[EYRACSubscriber class]]) {
+
+        EYRACSubscriber *subscriber = (EYRACSubscriber *)self.innerSubscriber;
+
+        [subscriber sendStart:task];
+    }
+}
 @end

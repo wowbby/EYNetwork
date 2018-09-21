@@ -10,4 +10,5 @@
 
 @interface RACPassthroughSubscriber (RACSupport)
 - (void)sendProgress:(NSProgress *)progress;
+- (void)sendStart:(NSURLSessionTask *)task;
 @end

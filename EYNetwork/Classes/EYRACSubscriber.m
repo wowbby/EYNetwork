@@ -15,6 +15,7 @@
 @property (nonatomic, copy) void (^error)(NSError *error);
 @property (nonatomic, copy) void (^progress)(NSProgress *progress);
 @property (nonatomic, copy) void (^completed)(void);
+@property (nonatomic, copy) void (^start)(NSURLSessionTask *task);
 
 @property (nonatomic, strong, readonly) RACCompoundDisposable *disposable;
 @end
@@ -23,9 +24,11 @@
 
 #pragma mark Lifecycle
 
-+ (instancetype)subscriberWithNext:(void (^)(id x))next progress:(void (^)(NSProgress *progress))progress error:(void (^)(NSError *error))error completed:(void (^)(void))completed
++ (instancetype)subscriberWithStart:(void (^)(NSURLSessionTask *task))start next:(void (^)(id x))next progress:(void (^)(NSProgress *progress))progress error:(void (^)(NSError *error))error completed:(void (^)(void))completed
 {
     EYRACSubscriber *subscriber = [[self alloc] init];
+
+    subscriber->_start = [start copy];
     subscriber->_progress = [progress copy];
     subscriber->_next = [next copy];
     subscriber->_error = [error copy];
@@ -64,7 +67,17 @@
 }
 
 #pragma mark RACSubscriber
+- (void)sendStart:(NSURLSessionTask *)task
+{
+    @synchronized(self)
+    {
+        void (^startBlock)(id) = [self.start copy];
+        if (startBlock == nil)
+            return;
 
+        startBlock(task);
+    }
+}
 - (void)sendNext:(id)value
 {
     @synchronized(self)

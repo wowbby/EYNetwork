@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - EYNetwork (0.1.4):
+  - EYNetwork (0.1.5):
     - AFNetworking
     - ReactiveObjC
   - ReactiveObjC (3.1.0)
@@ -33,9 +33,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  EYNetwork: 637019be1feff22c74209cea1f9beacfaf68db47
+  EYNetwork: 59562e396474ba1ea120daa0e501b04a5988ccc4
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
 
 PODFILE CHECKSUM: 5cbb12d2456dabd3e14f7ac37129e304d6175061
 
-COCOAPODS: 1.6.0.beta.1
+COCOAPODS: 1.5.3
