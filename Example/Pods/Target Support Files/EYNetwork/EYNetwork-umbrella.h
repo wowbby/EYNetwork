@@ -10,6 +10,13 @@
 #endif
 #endif
 
+#import "EYNetworkClient.h"
+#import "EYNetwokAgent.h"
+#import "EYCacheMetadata.h"
+#import "EYRequestCache.h"
+#import "EYRequestSampleCache.h"
+#import "EYRequest.h"
+#import "NSString+Hash.h"
 #import "AFHTTPSessionManager+RACSupport.h"
 #import "AFNetworkReachabilityManager+RACSupport.h"
 #import "EYNetwork.h"

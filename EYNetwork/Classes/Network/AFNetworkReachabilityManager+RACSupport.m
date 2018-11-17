@@ -10,7 +10,6 @@
 @implementation AFNetworkReachabilityManager (RACSupport)
 - (RACSignal *)rac_startMonitoring
 {
-
     [self stopMonitoring];
     return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
       [self startMonitoring];

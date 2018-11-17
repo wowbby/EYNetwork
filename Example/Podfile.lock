@@ -14,13 +14,27 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - EYNetwork (0.1.5):
-    - AFNetworking
+  - EYNetwork/Client (0.2.0):
+    - EYNetwork/Client/Agent (= 0.2.0)
+    - EYNetwork/Client/Cache (= 0.2.0)
+    - EYNetwork/Client/Request (= 0.2.0)
+    - EYNetwork/Client/Utils (= 0.2.0)
+    - EYNetwork/Network
+  - EYNetwork/Client/Agent (0.2.0):
+    - EYNetwork/Network
+  - EYNetwork/Client/Cache (0.2.0):
+    - EYNetwork/Network
+  - EYNetwork/Client/Request (0.2.0):
+    - EYNetwork/Network
+  - EYNetwork/Client/Utils (0.2.0):
+    - EYNetwork/Network
+  - EYNetwork/Network (0.2.0):
+    - AFNetworking (~> 3.2.1)
     - ReactiveObjC
   - ReactiveObjC (3.1.0)
 
 DEPENDENCIES:
-  - EYNetwork (from `../`)
+  - EYNetwork/Client (from `../`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -33,9 +47,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  EYNetwork: 59562e396474ba1ea120daa0e501b04a5988ccc4
+  EYNetwork: f916e9f392bad9e36acbbc6f4c83ecf89a25a8b4
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
 
-PODFILE CHECKSUM: 5cbb12d2456dabd3e14f7ac37129e304d6175061
+PODFILE CHECKSUM: 94877156f3a9fdf97f879e4ac66c0e5319111420
 
 COCOAPODS: 1.5.3

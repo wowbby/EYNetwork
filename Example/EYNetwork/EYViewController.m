@@ -44,26 +44,6 @@
     // Do any additional setup after loading the view, typically from a nib.
     //http://api01.bitspaceman.com:8000/news/qihoo?apikey=6Vw54sUQ1woFrPFsUeRtjPk6CSWIJRBnQKJV6DJ1BjD5Xo4zDyLpE38w7R8nkjUs
     //    https://dldir1.qq.com/qqfile/QQforMac/QQ_V6.5.1.dmg
-    RACSignal *signal = [[AFHTTPSessionManager manager] GET:@"https://dldir1.qq.com/qqfile/QQforMac/QQ_V6.5.1.dmg"
-                                                 parameters:@{}];
-
-    [signal subscribeStart:^(NSURLSessionTask *task) {
-
-      NSLog(@"start");
-    }
-        Next:^(id _Nullable x) {
-          NSLog(@"%@", x);
-        }
-        progress:^(NSProgress *progress) {
-          NSLog(@"progress");
-        }
-        error:^(NSError *_Nullable error) {
-          NSLog(@"%@", error);
-        }
-        completed:^{
-
-          NSLog(@"完成");
-        }];
 }
 
 - (void)didReceiveMemoryWarning
