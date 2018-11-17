@@ -21,10 +21,13 @@ PODS:
     - EYNetwork/Client/Utils (= 0.2.0)
     - EYNetwork/Network
   - EYNetwork/Client/Agent (0.2.0):
+    - EYNetwork/Client/Request
     - EYNetwork/Network
   - EYNetwork/Client/Cache (0.2.0):
     - EYNetwork/Network
   - EYNetwork/Client/Request (0.2.0):
+    - EYNetwork/Client/Cache
+    - EYNetwork/Client/Utils
     - EYNetwork/Network
   - EYNetwork/Client/Utils (0.2.0):
     - EYNetwork/Network
@@ -47,7 +50,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  EYNetwork: f916e9f392bad9e36acbbc6f4c83ecf89a25a8b4
+  EYNetwork: d089e88034236056523c4394eba2f07dbbc43bd9
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
 
 PODFILE CHECKSUM: 94877156f3a9fdf97f879e4ac66c0e5319111420

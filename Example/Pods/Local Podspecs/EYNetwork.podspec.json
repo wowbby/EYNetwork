@@ -43,11 +43,24 @@
       "subspecs": [
         {
           "name": "Agent",
-          "source_files": "EYNetwork/Classes/Client/Agent/*.{h,m}"
+          "source_files": "EYNetwork/Classes/Client/Agent/*.{h,m}",
+          "dependencies": {
+            "EYNetwork/Client/Request": [
+
+            ]
+          }
         },
         {
           "name": "Request",
-          "source_files": "EYNetwork/Classes/Client/Request/*.{h,m}"
+          "source_files": "EYNetwork/Classes/Client/Request/*.{h,m}",
+          "dependencies": {
+            "EYNetwork/Client/Utils": [
+
+            ],
+            "EYNetwork/Client/Cache": [
+
+            ]
+          }
         },
         {
           "name": "Cache",

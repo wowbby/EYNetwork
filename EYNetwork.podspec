@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EYNetwork'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = '基于RAC的网络请求封装'
 
 # This description is used to generate tags and improve search results.
@@ -46,9 +46,12 @@ Pod::Spec.new do |s|
       ss.dependency 'EYNetwork/Network'
       ss.subspec 'Agent' do |sss|
           sss.source_files = 'EYNetwork/Classes/Client/Agent/*.{h,m}'
+          sss.dependency 'EYNetwork/Client/Request'
           end
       ss.subspec 'Request' do |sss|
           sss.source_files = 'EYNetwork/Classes/Client/Request/*.{h,m}'
+          sss.dependency 'EYNetwork/Client/Utils'
+          sss.dependency 'EYNetwork/Client/Cache'
           end
       ss.subspec 'Cache' do |sss|
           sss.source_files = 'EYNetwork/Classes/Client/Cache/*.{h,m}'
