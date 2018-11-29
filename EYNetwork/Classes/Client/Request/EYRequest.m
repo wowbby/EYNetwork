@@ -29,8 +29,6 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-
-        self.cache = [[EYRequestSampleCache alloc] initWithCacheKey:self.cacheKey cacheTimeInSeconds:self.cacheTimeInSeconds responseSerializerType:self.responseSerializerType];
     }
     return self;
 }
@@ -47,6 +45,7 @@
 }
 - (RACSignal *)start
 {
+    self.cache = [[EYRequestSampleCache alloc] initWithCacheKey:self.cacheKey cacheTimeInSeconds:self.cacheTimeInSeconds responseSerializerType:self.responseSerializerType];
     return [RACSignal createSignal:^RACDisposable *_Nullable(id<RACSubscriber> _Nonnull subscriber) {
 
       if (!self.ignoreCache) {
