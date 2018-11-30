@@ -10,9 +10,9 @@
 #endif
 #endif
 
-#import "EYNetworkClient.h"
-#import "EYNetwokAgent.h"
 #import "EYCacheMetadata.h"
+#import "EYNetwokAgent.h"
+#import "EYNetworkClient.h"
 #import "EYRequest.h"
 #import "EYRequestCache.h"
 #import "EYRequestSampleCache.h"

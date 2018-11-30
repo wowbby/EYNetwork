@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EYNetwork'
-  s.version          = '0.3.4'
+  s.version          = '0.3.5'
   s.summary          = '基于RAC的网络请求封装'
 
 # This description is used to generate tags and improve search results.
@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
       ss.dependency 'ReactiveObjC'
       end
   s.subspec 'Client' do |ss|
-      ss.source_files = 'EYNetwork/Classes/Client/**/*.{h,m}'
+      ss.source_files = 'EYNetwork/Classes/Client/*.{h,m}'
       ss.dependency 'EYNetwork/Network'
       end
 

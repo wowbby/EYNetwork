@@ -14,20 +14,9 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - EYNetwork/Client (0.3.0):
-    - EYNetwork/Client/Agent (= 0.3.0)
-    - EYNetwork/Client/Request (= 0.3.0)
-    - EYNetwork/Client/Utils (= 0.3.0)
+  - EYNetwork/Client (0.3.5):
     - EYNetwork/Network
-  - EYNetwork/Client/Agent (0.3.0):
-    - EYNetwork/Client/Request
-    - EYNetwork/Network
-  - EYNetwork/Client/Request (0.3.0):
-    - EYNetwork/Client/Utils
-    - EYNetwork/Network
-  - EYNetwork/Client/Utils (0.3.0):
-    - EYNetwork/Network
-  - EYNetwork/Network (0.3.0):
+  - EYNetwork/Network (0.3.5):
     - AFNetworking (~> 3.2.1)
     - ReactiveObjC
   - ReactiveObjC (3.1.0)
@@ -46,7 +35,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  EYNetwork: 738398968b4942e03c20fab2cbfd39988d84207a
+  EYNetwork: 290239578f6d3f456aaa14fda757a3c585c59d43
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
 
 PODFILE CHECKSUM: 94877156f3a9fdf97f879e4ac66c0e5319111420
